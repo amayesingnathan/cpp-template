@@ -4,9 +4,20 @@ import subprocess
 import platform
 
 from PremakeSetup import PremakeConfiguration as PremakeRequirements
+from ProjectSetup import ProjectConfiguration as ProjectConfig
 
 os.chdir(f"{sys.path[0]}/../..") # Change working dir to repo root
+namespaceConfigured = ProjectConfig.CheckNamespace()
+projectNameConfigured = ProjectConfig.CheckProjectName()
 premakeInstalled = PremakeRequirements.Validate()
+
+if (not namespaceConfigured):
+    namespace = str(input("Enter the top level name for the repo...\n")).strip()
+    ProjectConfig.SetupNamespace(namespace)
+
+if (not projectNameConfigured):
+    projectName = str(input("Enter the name for the template project...\n")).strip()
+    ProjectConfig.SetupProject(projectName)
 
 if (premakeInstalled):
     print("\nRunning premake...")
