@@ -14,6 +14,7 @@ The repo directory will still need to be renamed manually as sometimes the permi
 
 ### Dependencies
 
+* Python3
 * premake5 - Will be downloaded and extracted as a binary when the setup script is run if it is not found.
 * Currently only supports Windows and Linux (Ubuntu tested).
 
