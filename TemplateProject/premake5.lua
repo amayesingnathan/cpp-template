@@ -9,7 +9,6 @@ project "TemplateProject"
     { 
         "src/**.h", 
         "src/**.cpp",
-        "src/**.hxx", 
         "src/**.ixx",
         "src/**.ixxp",
     }
@@ -28,7 +27,7 @@ project "TemplateProject"
 	{
 	}
 	
-    filter { "files:**.hxx" }
+    filter { "files:**.h" }
         compileas "HeaderUnit"
     
     filter { "files:**.ixx" }
