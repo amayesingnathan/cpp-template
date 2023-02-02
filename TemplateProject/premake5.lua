@@ -4,14 +4,14 @@ project "TemplateProject"
 		
     targetdir 	("%{wks.location}/bin/%{prj.name}/" .. outputDir)
     objdir 		("%{wks.location}/obj/%{prj.name}/" .. outputDir)
-	
-	pchheader "pch.h"
-	pchsource "src/pch.cpp"
 
     files 
     { 
         "src/**.h", 
         "src/**.cpp",
+        "src/**.hxx", 
+        "src/**.ixx",
+        "src/**.ixxp",
     }
 	
 	defines
@@ -28,6 +28,15 @@ project "TemplateProject"
 	{
 	}
 	
+    filter { "files:**.hxx" }
+        compileas "HeaderUnit"
+    
+    filter { "files:**.ixx" }
+        compileas "Module"
+        
+    filter { "files:**.ixxp" }
+        compileas "ModulePartition"
+		
     filter "system:windows"
         kind "ProjectTypeWin"
         staticruntime "off"
