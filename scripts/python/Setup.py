@@ -14,6 +14,8 @@ premakeInstalled = PremakeRequirements.Validate()
 if (not namespaceConfigured):
     namespace = str(input("Enter the top level name for the repo...\n")).strip()
     ProjectConfig.SetupNamespace(namespace)
+    
+ProjectConfig.SetupProjectType()
 
 if (not projectNameConfigured):
     projectName = str(input("Enter the name for the template project...\n")).strip()

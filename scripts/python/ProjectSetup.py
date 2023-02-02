@@ -24,6 +24,24 @@ def ReplaceProjectName(projectName):
     filedata = filedata.replace('TemplateProject', projectName)
     with open('{name}/premake5.lua'.format(name=projectName), 'w') as premakeProj:
         premakeProj.write(filedata)
+        
+def ReplaceProjectType(projectType):
+    match projectType:
+        case 'l':
+            winProjType = 'StaticLib'
+            linuxProjType = 'SharedLib'
+        case 'e':
+            winProjType = 'ConsoleApp'
+            linuxProjType = 'ConsoleApp'
+        case _:
+            return
+
+    with open('TemplateProject/premake5.lua', 'r') as premakeProj:
+        filedata = premakeProj.read()
+    filedata = filedata.replace('ProjectTypeLinux', linuxProjType)
+    filedata = filedata.replace('ProjectTypeWin', winProjType)
+    with open('TemplateProject/premake5.lua', 'w') as premakeProj:
+        premakeProj.write(filedata)
     
 class ProjectConfiguration:
 
@@ -39,6 +57,17 @@ class ProjectConfiguration:
     @classmethod
     def SetupNamespace(cls, namespace):
         ReplaceNamespace(namespace)
+        
+    @classmethod
+    def SetupProjectType(cls):
+        projectTypeSetup = False
+        projectType = ''
+        while not projectTypeSetup:
+            reply = str(input("Please choose binary type of project, executable or library? [E/L]: ")).lower().strip()[:1]
+            projectTypeSetup = (reply == 'e' or reply == 'l')
+            projectType = reply
+            
+        ReplaceProjectType(projectType)
 
     @classmethod
     def SetupProject(cls, projectName):

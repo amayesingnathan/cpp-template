@@ -29,12 +29,12 @@ project "TemplateProject"
 	}
 	
     filter "system:windows"
-        kind "StaticLib"
+        kind "ProjectTypeWin"
         staticruntime "off"
         systemversion "latest"
 		
 	filter "system:linux"
-        kind "SharedLib"
+        kind "ProjectTypeLinux"
         staticruntime "off"
         pic "On"
         systemversion "latest"
