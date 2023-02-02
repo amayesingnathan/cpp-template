@@ -59,7 +59,7 @@ class ProjectConfiguration:
         ReplaceNamespace(namespace)
         
     @classmethod
-    def SetupProjectType(cls):
+    def SetupProject(cls, projectName):
         projectTypeSetup = False
         projectType = ''
         while not projectTypeSetup:
@@ -68,8 +68,6 @@ class ProjectConfiguration:
             projectType = reply
             
         ReplaceProjectType(projectType)
-
-    @classmethod
-    def SetupProject(cls, projectName):
+        
         os.rename("TemplateProject", projectName)
         ReplaceProjectName(projectName)
