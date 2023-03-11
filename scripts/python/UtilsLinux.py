@@ -1,6 +1,5 @@
 import sys
 import os
-import winreg
 
 import requests
 import time
@@ -70,56 +69,12 @@ def DownloadFile(url, filepath):
                 sys.stdout.flush()
     sys.stdout.write('\n')
 
-def UnpackFile(filepath, filter, deleteTarFile=True):
+def UnpackFile(filepath, _, deleteTarFile=True):
     tarFilePath = os.path.abspath(filepath) # get full path of files
-    tarFileLocation = os.path.dirname(tarFilePath)
-    tarFileContent = dict()
-    tarFileContentSize = 0
 
-    myTar = tarfile.open(tarFilePath);
-    for name in myTar.getnames():
-        valid = False
-        for extension in filter:
-            if (Path(name).suffix == extension):
-                valid = True
-                break
-        if (filter.count() == 0):
-            valid = True
-        if (not valid):
-            continue
-        tarFileContent[name] = myTar.gettarinfo(name).size
-
-    tarFileContentSize = sum(tarFileContent.values())
-    extractedContentSize = 0
-    startTime = time.time()
-
-    for tarpedFileName, tarpedFileSize in tarFileContent.items():
-        UnpackedFilePath = os.path.abspath(f"{tarFileLocation}/{tarpedFileName}")
-        os.makedirs(os.path.dirname(UnpackedFilePath), exist_ok=True)
-        if os.path.isfile(UnpackedFilePath):
-            tarFileContentSize -= tarpedFileSize
-        else:
-            myTar.extract(tarpedFileName, tarFileLocation)
-            extractedContentSize += tarpedFileSize
-        try:
-            done = int(50*extractedContentSize/tarFileContentSize)
-            percentage = (extractedContentSize / tarFileContentSize) * 100
-        except ZeroDivisionError:
-            done = 50
-            percentage = 100
-        elapsedTime = time.time() - startTime
-        try:
-            avgKBPerSecond = (extractedContentSize / 1024) / elapsedTime
-        except ZeroDivisionError:
-            avgKBPerSecond = 0.0
-        avgSpeedString = '{:.2f} KB/s'.format(avgKBPerSecond)
-        if (avgKBPerSecond > 1024):
-            avgMBPerSecond = avgKBPerSecond / 1024
-            avgSpeedString = '{:.2f} MB/s'.format(avgMBPerSecond)
-        sys.stdout.write('\r[{}{}] {:.2f}% ({})     '.format('█' * done, '.' * (50-done), percentage, avgSpeedString))
-        sys.stdout.flush()
-
-    sys.stdout.write('\n')
+    myTar = tarfile.open(tarFilePath)
+    myTar.extractall(os.path.dirname(tarFilePath))
+    myTar.close()
 
     if deleteTarFile:
         os.remove(tarFilePath) # delete tar file

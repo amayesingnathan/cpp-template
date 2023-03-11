@@ -26,13 +26,19 @@ class PremakeConfiguration:
 
     if platform.system() == "Windows":
         premakeSuffix = "windows.zip"
+        premakeExtension = ".exe"
+        premakeFilters = [premakeExtension]
     elif platform.system() == "Linux":
         premakeSuffix = "linux.tar.gz"
+        premakeExtension = ""
+        premakeFilters = [premakeExtension]
     else:
         premakeSuffix = ""
+        premakeExtension = ""
+        premakeFilters = []
         
     premakeVersion = GetLatestPremakeVersion()
-    premakeZipUrls = f"https://github.com/premake/premake-core/releases/download/v{premakeVersion}/premake-{premakeVersion}-{premakeSuffix}"
+    premakeBinaryUrls = f"https://github.com/premake/premake-core/releases/download/v{premakeVersion}/premake-{premakeVersion}-{premakeSuffix}"
     premakeLicenseUrl = "https://raw.githubusercontent.com/premake/premake-core/master/LICENSE.txt"
     premakeDirectory = "./dependencies/premake/bin"
 
@@ -47,8 +53,8 @@ class PremakeConfiguration:
 
     @classmethod
     def CheckIfPremakeInstalled(cls):
-        premakeExe = Path(f"{cls.premakeDirectory}/premake5.exe");
-        if (not premakeExe.exists()):
+        premakeBinary = Path(f"{cls.premakeDirectory}/premake5{cls.premakeExtension}");
+        if (not premakeBinary.exists()):
             return cls.InstallPremake()
 
         return True
@@ -62,11 +68,11 @@ class PremakeConfiguration:
                 return False
             permissionGranted = (reply == 'y')
 
-        premakePath = f"{cls.premakeDirectory}/premake-{cls.premakeVersion}-windows.zip"
-        print("Downloading {0:s} to {1:s}".format(cls.premakeZipUrls, premakePath))
-        Utils.DownloadFile(cls.premakeZipUrls, premakePath)
+        premakePath = f"{cls.premakeDirectory}/premake-{cls.premakeVersion}-{cls.premakeSuffix}"
+        print("Downloading {0:s} to {1:s}".format(cls.premakeBinaryUrls, premakePath))
+        Utils.DownloadFile(cls.premakeBinaryUrls, premakePath)
         print("Extracting", premakePath)
-        Utils.UnpackFile(premakePath, [".exe"], deleteZipFile=True)
+        Utils.UnpackFile(premakePath, cls.premakeFilters, True)
         print(f"Premake {cls.premakeVersion} has been downloaded to '{cls.premakeDirectory}'")
 
         premakeLicensePath = f"{cls.premakeDirectory}/LICENSE.txt"
