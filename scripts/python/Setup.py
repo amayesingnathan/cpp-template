@@ -7,15 +7,14 @@ from PremakeSetup import PremakeConfiguration as PremakeRequirements
 from ProjectSetup import ProjectConfiguration as ProjectConfig
 
 os.chdir(f"{sys.path[0]}/../..") # Change working dir to repo root
-namespaceConfigured = ProjectConfig.CheckNamespace()
-projectNameConfigured = ProjectConfig.CheckProjectName()
+projectConfigured = ProjectConfig.CheckProjectConfig()
 premakeInstalled = PremakeRequirements.Validate()
 
-if (not namespaceConfigured):
+if (not projectConfigured):
     namespace = str(input("Enter the top level name for the repo...\n")).strip()
     ProjectConfig.SetupNamespace(namespace)
 
-if (not projectNameConfigured):
+if (not projectConfigured):
     projectName = str(input("Enter the name for the template project...\n")).strip()
     ProjectConfig.SetupProject(projectName)
 

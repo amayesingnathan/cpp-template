@@ -46,12 +46,7 @@ def ReplaceProjectType(projectType):
 class ProjectConfiguration:
 
     @classmethod
-    def CheckNamespace(cls):
-        path = os.path.basename(os.getcwd())
-        return path != "cpp-template"
-
-    @classmethod
-    def CheckProjectName(cls):
+    def CheckProjectConfig(cls):
         return not os.path.isdir('TemplateProject')
 
     @classmethod
