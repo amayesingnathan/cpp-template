@@ -1,6 +1,6 @@
 project "TemplateProject"
     language "C++"
-    cppdialect "C++20"
+    cppdialect "C++latest"
 		
     targetdir 	("%{wks.location}/bin/%{prj.name}/" .. outputDir)
     objdir 		("%{wks.location}/obj/%{prj.name}/" .. outputDir)
